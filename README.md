@@ -21,7 +21,7 @@
 
 ---
 
-## 📑 Abstract
+## Abstract
 
 This repository implements the **Informer** architecture for long-sequence time-series forecasting (LSTF), specifically optimized for **Stock Market Data Analysis**. While traditional Transformer models suffer from high memory consumption and quadratic time complexity, the Informer model leverages a ProbSparse self-attention mechanism to achieve $\mathcal{O}(L \log L)$ complexity.
 
@@ -92,11 +92,11 @@ To capture immediate past dependencies explicitly before the Transformer layers:
 
 > **Data Scale:** The final dataset comprises millions of data points, processed with Zero-Mean Unit-Variance normalization to stabilize the **ProbSparse** attention mechanism.
 
-## ⚙️ Model Architecture & Configuration
+## Model Architecture & Configuration
 
 The model is configured to handle high-dimensional inputs with a specific focus on short-term precision (`out_len=1`) using a full-attention mechanism. Below is the detailed hyperparameter configuration used for the final training runs.
 
-### 🔌 Input/Output Tensor Structure
+### Input/Output Tensor Structure
 The Informer model processes four specific tensors during the forward pass:
 
 * **`x_enc` (Encoder Input):** The historical sequence of **100 features** (Open, Close, Indicators, Macro Indices).
@@ -108,7 +108,7 @@ The Informer model processes four specific tensors during the forward pass:
 * **`x_mark_dec` (Decoder Time Features):** Future time-stamps for the prediction horizon.
     * *Shape:* `(Batch, 48 + 1, Features)`
 
-### 🛠 Hyperparameter Specification
+### Hyperparameter Specification
 
 | Category | Parameter | Value | Description |
 | :--- | :--- | :--- | :--- |
@@ -132,6 +132,38 @@ The Informer model processes four specific tensors during the forward pass:
 
 > **Configuration Note:** Unlike the standard Informer which uses `prob` attention for extreme long sequences, this configuration utilizes **`attn='full'`**. Since our prediction horizon is short (`pred_len=1`), Full Attention provides superior granularity and accuracy compared to sparse approximations, while the Informer's Generative Decoder structure prevents error accumulation.
 
+
+## 📉 Performance & Quantitative Analysis
+
+The model's performance was rigorously evaluated using a "Walk-Forward" validation methodology, respecting the temporal order of financial data to prevent look-ahead bias.
+
+### 1. Evaluation Metrics
+To assess the precision of the **Next-Day Forecast (`pred_len=1`)**, we utilized the following error metrics implemented in `utils/scores.py`:
+
+* **MSE (Mean Squared Error):** Penalizes larger errors heavily, ensuring the model reacts to volatility spikes.
+* **MAE (Mean Absolute Error):** Provides a linear representation of average error magnitude.
+* **RMSE (Root Mean Squared Error):** Used to measure the standard deviation of prediction errors.
+
+### 2. Training Dynamics & Convergence
+Training was conducted over a standard epoch cycle with early stopping enabled. The training logs (`logs/logs.txt`) and divergence checks (`logs/div-check.txt`) indicate stable convergence:
+
+* **Gradient Flow:** Analysis of `gradient-flow.png` confirms that gradients propagate effectively through the ProbSparse attention layers without vanishing, validating the `e_layers=2` depth.
+* **Generalization:** The gap between Training Loss and Validation Loss remains minimal (`train-valid.png`), suggesting the model successfully learned market features without overfitting to noise.
+
+### 3. Inference & Reproducibility
+All experimental results are logged systematically to ensure reproducibility. The model generates a comprehensive performance review upon completion of inference.
+
+#### Project Directory Structure
+The repository is organized to separate source code, model artifacts, and evaluation logs:
+
+```text
+INFORMER
+├── Img-src/            # Visualization of Loss, Gradient Flow, and Forecasts
+├── logs/               # Run-time logs (div-check.txt) & Prediction CSVs
+├── models/             # Core Architecture (Encoder, Decoder, Attention)
+├── utils/              # Data Loaders (dataset.py) & Scoring Metrics
+└── train.py            # Main training execution script
+```
 
 ## Installation & Usage
 
