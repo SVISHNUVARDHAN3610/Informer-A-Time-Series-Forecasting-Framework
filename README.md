@@ -202,19 +202,8 @@ Below represent the training dynamics and forecast outputs generated during the 
 
 ---
 
-## Installation & Usage
 
-### Prerequisites
-Ensure you have Python 3.8+ and PyTorch installed.
-
-```bash
-git clone [https://github.com/yourusername/informer-stock-forecasting.git](https://github.com/yourusername/informer-stock-forecasting.git)
-cd informer-stock-forecasting
-pip install -r requirements.txt
-```
-
-
-## 📜 Acknowledgements & References
+##Acknowledgements & References
 
 This project is an **adaptation** of the Informer architecture, specifically re-engineered for financial time-series forecasting. While the core ProbSparse attention mechanism is derived from the original research, the data pipeline and feature engineering have been custom-built for high-volatility stock market environments.
 
@@ -223,7 +212,7 @@ This project is an **adaptation** of the Informer architecture, specifically re-
 * **Authors:** Haoyi Zhou, et al.
 
 > **Note:** Significant modifications were made to the original codebase to support multi-variate financial datasets (4,000+ tickers) and "Walk-Forward" validation protocols.
-### 📝 Citation
+###Citation
 If you use this stock market adaptation or the original Informer architecture in your research, please cite the original authors:
 
 ```bibtex
@@ -236,11 +225,11 @@ If you use this stock market adaptation or the original Informer architecture in
 ```
 
 
-## 📬 Contact & Data Access
+##Contact & Data Access
 
 This project maintains a high standard of data integrity and reproducibility. Due to the proprietary nature and massive scale of the training set (**4,452 tickers** with global macro-indices), the full dataset is not hosted in this repository.
 
-### 🏛️ Requesting the Dataset
+###Requesting the Dataset
 Researchers and developers interested in replicating these results or collaborating on financial AI projects may request access to the **pre-processed Market Data**.
 
 <div align="center">
