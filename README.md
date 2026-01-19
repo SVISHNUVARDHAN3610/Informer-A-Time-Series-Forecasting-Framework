@@ -61,6 +61,24 @@ Unlike standard encoder-decoder structures that generate outputs step-by-step (d
 
 ---
 
+## 💾 Dataset & Features
+
+To ensure robust generalization across different market conditions, this model was trained on a high-dimensional financial dataset comprising **4,452** individual equity instruments. The dataset is designed to capture not just price action, but the broader macroeconomic context driving market volatility.
+
+### Feature Composition
+The input vector ($X_t$) is constructed from a multi-variate time series including:
+
+| Feature Category | Description | Count/Examples |
+| :--- | :--- | :--- |
+| **📈 Individual Equities** | High-cap, Mid-cap, and Small-cap stocks across NSE/BSE. | **4,452 Stocks** |
+| **🇮🇳 Key Benchmarks** | Primary national indices reflecting market health. | **NIFTY 50**, **SENSEX** |
+| **🏭 Sectoral Indices** | Domain-specific performance metrics. | **NIFTY IT**, **NIFTY PHARMA**, Bank, Auto, Metal |
+| **🌍 Global Indices** | International market indicators to capture cross-border correlation. | Major Global Indices (US, European, Asian Markets) |
+| **📊 Technical Indicators** | Computed momentum and volatility signals. | RSI, MACD, Bollinger Bands, ATR |
+
+> **Data Preprocessing:** All series were normalized using Zero-Mean Unit-Variance (Z-Score) normalization to stabilize convergence during the ProbSparse attention mechanism calculation.
+
+
 ## Installation & Usage
 
 ### Prerequisites
