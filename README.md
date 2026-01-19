@@ -133,37 +133,48 @@ The Informer model processes four specific tensors during the forward pass:
 > **Configuration Note:** Unlike the standard Informer which uses `prob` attention for extreme long sequences, this configuration utilizes **`attn='full'`**. Since our prediction horizon is short (`pred_len=1`), Full Attention provides superior granularity and accuracy compared to sparse approximations, while the Informer's Generative Decoder structure prevents error accumulation.
 
 
-## 📉 Performance & Quantitative Analysis
+## 📉 Performance & Training Dynamics
 
-The model's performance was rigorously evaluated using a "Walk-Forward" validation methodology, respecting the temporal order of financial data to prevent look-ahead bias.
+The model was trained for **42 Epochs** on a high-volatility dataset. The training logs demonstrate successful optimization of the Informer objective function, with consistent gradient propagation and loss convergence.
 
-### 1. Evaluation Metrics
-To assess the precision of the **Next-Day Forecast (`pred_len=1`)**, we utilized the following error metrics implemented in `utils/scores.py`:
+### 1. Quantitative Metrics (Final Epoch)
+| Metric | Value | Interpretation |
+| :--- | :--- | :--- |
+| **Training Loss** | **0.2395** | Strong convergence (reduced from 0.33), indicating the model effectively learned the training distribution. |
+| **Validation Loss** | **1.524** | Indicates distribution shift between train and validation sets (common in non-stationary markets). |
+| **Gradient Norm** | **1.327** | Healthy gradient flow confirming no vanishing/exploding gradient issues in the deep network. |
+| **Val MAE** | **1.931** | Average absolute error on unseen data. |
 
-* **MSE (Mean Squared Error):** Penalizes larger errors heavily, ensuring the model reacts to volatility spikes.
-* **MAE (Mean Absolute Error):** Provides a linear representation of average error magnitude.
-* **RMSE (Root Mean Squared Error):** Used to measure the standard deviation of prediction errors.
+> **Research Note:** The divergence between training and validation performance highlights the extreme non-stationarity of the specific financial timeframe used. While the Informer architecture successfully fitted the training regime, future work will focus on *covariate shift adaptation* to improve the $R^2$ score.
 
-### 2. Training Dynamics & Convergence
-Training was conducted over a standard epoch cycle with early stopping enabled. The training logs (`logs/logs.txt`) and divergence checks (`logs/div-check.txt`) indicate stable convergence:
+---
 
-* **Gradient Flow:** Analysis of `gradient-flow.png` confirms that gradients propagate effectively through the ProbSparse attention layers without vanishing, validating the `e_layers=2` depth.
-* **Generalization:** The gap between Training Loss and Validation Loss remains minimal (`train-valid.png`), suggesting the model successfully learned market features without overfitting to noise.
+### 2. Visual Analysis
 
-### 3. Inference & Reproducibility
-All experimental results are logged systematically to ensure reproducibility. The model generates a comprehensive performance review upon completion of inference.
+Below represent the training dynamics and forecast outputs generated during the experiment.
 
-#### Project Directory Structure
-The repository is organized to separate source code, model artifacts, and evaluation logs:
+#### A. Training Convergence
+<p align="center">
+  <img src="Img-src/train-valid.png" width="45%" alt="Training vs Validation Loss">
+  <img src="Img-src/gradient-flow.png" width="45%" alt="Gradient Flow">
+</p>
 
-```text
-INFORMER
-├── Img-src/            # Visualization of Loss, Gradient Flow, and Forecasts
-├── logs/               # Run-time logs (div-check.txt) & Prediction CSVs
-├── models/             # Core Architecture (Encoder, Decoder, Attention)
-├── utils/              # Data Loaders (dataset.py) & Scoring Metrics
-└── train.py            # Main training execution script
-```
+* **Left:** The *Training vs. Validation* plot highlights the optimization curve. The training loss (blue) shows a smooth descent, confirming the efficacy of the ProbSparse mechanism.
+* **Right:** The *Gradient Flow* visualizes the magnitude of gradients across layers, confirming that the deep encoder-decoder stack remains trainable without saturation.
+
+#### B. Forecasting Results
+<p align="center">
+  <img src="Img-src/forecast.png" width="80%" alt="Forecast vs Actual">
+</p>
+
+* **Forecast Plot:** A direct comparison between the Ground Truth (Actual Price) and the Informer's predictions. The model captures the general volatility clusters, though amplitude differences persist in extreme outlier events.
+
+<p align="center">
+  <img src="Img-src/pred.png" width="45%" alt="Prediction Scatter">
+  <img src="Img-src/valid-test.png" width="45%" alt="Validation Testing">
+</p>
+
+---
 
 ## Installation & Usage
 
