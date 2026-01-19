@@ -211,3 +211,26 @@ Ensure you have Python 3.8+ and PyTorch installed.
 git clone [https://github.com/yourusername/informer-stock-forecasting.git](https://github.com/yourusername/informer-stock-forecasting.git)
 cd informer-stock-forecasting
 pip install -r requirements.txt
+```
+
+
+## 📜 Acknowledgements & References
+
+This project is an **adaptation** of the Informer architecture, specifically re-engineered for financial time-series forecasting. While the core ProbSparse attention mechanism is derived from the original research, the data pipeline and feature engineering have been custom-built for high-volatility stock market environments.
+
+**Core Architecture Based On:**
+* **Paper:** [Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting](https://arxiv.org/abs/2012.07436) (AAAI 2021 Nominee)
+* **Authors:** Haoyi Zhou, et al.
+
+> **Note:** Significant modifications were made to the original codebase to support multi-variate financial datasets (4,000+ tickers) and "Walk-Forward" validation protocols.
+### 📝 Citation
+If you use this stock market adaptation or the original Informer architecture in your research, please cite the original authors:
+
+```bibtex
+@inproceedings{haoyietal-aaai2021,
+  title={Informer: Beyond Efficient Transformer for Long Sequence Time-Series Forecasting},
+  author={Haoyi Zhou and Shanghang Zhang and Jieqi Peng and Shuai Zhang and Jianxin Li and Hui Xiong and Wancai Zhang},
+  booktitle={The 35th AAAI Conference on Artificial Intelligence (AAAI)},
+  year={2021}
+}
+```
