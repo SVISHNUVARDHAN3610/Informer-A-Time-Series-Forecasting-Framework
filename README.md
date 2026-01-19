@@ -181,8 +181,10 @@ Below represent the training dynamics and forecast outputs generated during the 
 
 #### A. Training Convergence
 <p align="center">
-  <img src="Img-src/train-valid.png" width="45%" alt="Training vs Validation Loss">
+  <img src="Img-src/valid-test.png" width="45%" alt="Validation test">
   <img src="Img-src/gradient-flow.png" width="45%" alt="Gradient Flow">
+  <img src="Img-src/train.png" width="45%" alt="Gradient Flow">
+  
 </p>
 
 * **Left:** The *Training vs. Validation* plot highlights the optimization curve. The training loss (blue) shows a smooth descent, confirming the efficacy of the ProbSparse mechanism.
