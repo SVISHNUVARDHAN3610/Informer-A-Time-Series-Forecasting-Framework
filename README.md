@@ -26,6 +26,7 @@
 This repository implements the **Informer** architecture for long-sequence time-series forecasting (LSTF), specifically optimized for **Stock Market Data Analysis**. While traditional Transformer models suffer from high memory consumption and quadratic time complexity, the Informer model leverages a ProbSparse self-attention mechanism to achieve $\mathcal{O}(L \log L)$ complexity.
 
 This project demonstrates the model's capability to capture long-range dependencies in volatile financial datasets, providing accurate predictions for open/close prices and market trends. Furthermore, we address the challenge of non-stationary financial data by integrating distinct encoding techniques that preserve temporal context across extended horizons. The resulting framework not only improves forecast precision but also serves as a scalable backbone for developing automated algorithmic trading strategies.
+
 ---
 
 ## 🧠 Methodology
@@ -57,6 +58,7 @@ $$
 
 #### 3. Generative Style Decoder
 Unlike standard encoder-decoder structures that generate outputs step-by-step (dynamic decoding), the Informer uses a generative decoder to predict the entire long sequence in a single forward pass. This method effectively mitigates error accumulation during the inference phase of long-sequence forecasting.
+
 ---
 
 ## Installation & Usage
